@@ -308,3 +308,33 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--foreground);
 }
+
+/* Shimmer accent for headings and subtle surfaces */
+.shimmer{
+  background: linear-gradient(90deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.00) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.6s linear infinite;
+}
+@keyframes shimmer{ 0%{ background-position:200% 0 } 100%{ background-position:-200% 0 } }
+
+/* Tooltip used by gauges */
+.tooltip{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  top: calc(100% + 6px);
+  background: rgba(2,2,3,0.88);
+  color: var(--lux-ivory);
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.5rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  z-index: 40;
+  opacity: 0;
+  transform-origin: top center;
+  transition: opacity 140ms ease, transform 140ms ease;
+  pointer-events: none;
+}
+.group:hover .tooltip{ opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+

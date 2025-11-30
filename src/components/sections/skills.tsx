@@ -77,7 +77,8 @@ export function Skills() {
             >
                 <div className="text-center mb-10">
                     <h2 className="text-4xl sm:text-5xl font-serif tracking-tight font-light">Skills & Focus</h2>
-                    <p className="mt-3 text-sm text-(--muted-foreground) max-w-2xl mx-auto">Interactive breakdown showing angle (focus) and time (experience) across my main skill areas. Smooth motion, refined spacing, and subtle micro-interactions for a premium feel.</p>
+                    <div className="h-0.5 w-24 mx-auto mt-4 rounded-full shimmer" />
+                    <p className="mt-4 text-sm text-(--muted-foreground) max-w-2xl mx-auto">Interactive breakdown showing angle (focus) and time (experience) across my main skill areas. Smooth motion, refined spacing, and subtle micro-interactions for a premium feel.</p>
                 </div>
 
                 <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }} initial="hidden" whileInView="show" viewport={{ once: true }}>
@@ -90,12 +91,17 @@ export function Skills() {
                                 whileHover={{ scale: 1.035, y: -8 }}
                                 viewport={{ once: true }}
                                 transition={{ type: "spring", stiffness: 160, damping: 18, duration: 0.7, delay: i * 0.06 }}
-                                className="lux-card p-8 flex flex-col items-center text-center backdrop-blur-md"
+                                className="group lux-card p-8 flex flex-col items-center text-center backdrop-blur-md relative"
                                 style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.25)" }}
                             >
                                 <motion.div whileHover={{ scale: 1.06 }} transition={{ duration: 0.32 }} className="-mt-2">
                                     <Gauge angle={g.angle} years={g.years} />
                                 </motion.div>
+
+                                {/* Tooltip */}
+                                <div className="tooltip" aria-hidden>
+                                    Angle: {g.angle}° • {g.years < 1 ? "<1y" : `${g.years}y`} • {g.items.join(', ')}
+                                </div>
 
                                 <h3 className="mt-4 text-lg font-light text-(--lux-ivory)">{g.label}</h3>
 

@@ -336,5 +336,5 @@ html {
   transition: opacity 140ms ease, transform 140ms ease;
   pointer-events: none;
 }
-.group:hover .tooltip{ opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.group:hover .tooltip, .group:focus .tooltip, .group:focus-within .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 

@@ -42,9 +42,9 @@ function Gauge({ angle, years }: { angle: number; years: number }) {
                         fill="transparent"
                         stroke="url(#g)"
                         strokeWidth={8}
-                        strokeLinecap="round"
-                        strokeDasharray={`${dash} ${circumference - dash}`}
-                        initial={{ strokeDashoffset: circumference }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8 }}
                         animate={{ strokeDashoffset: circumference - dash }}
                         transition={{ duration: 0.9, ease: "easeOut" }}
                         transform="rotate(-90)"
@@ -62,16 +62,19 @@ function Gauge({ angle, years }: { angle: number; years: number }) {
                 <div className="text-xs text-(--muted-foreground)">experience</div>
             </div>
         </div>
-    );
+                                                className="group lux-card p-8 flex flex-col items-center text-center relative"
+                                                tabIndex={0}
+                                                role="button"
+                                                aria-describedby={`skill-tooltip-${g.id}`}
 }
 
 export function Skills() {
     return (
         <section id="skills" className="container mx-auto pt-24 pb-20 px-4 md:px-8">
-            <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                                                {/* Tooltip (visible on hover OR focus) */}
+                                                <div id={`skill-tooltip-${g.id}`} className="tooltip" role="status">
+                                                    Angle: {g.angle}° • {g.years < 1 ? "<1y" : `${g.years}y`} • {g.items.join(', ')}
+                                                </div>
                 transition={{ duration: 0.8 }}
                 style={{ willChange: "transform, opacity" }}
             >

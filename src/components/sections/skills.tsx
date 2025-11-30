@@ -12,17 +12,19 @@ type SkillGroup = {
 };
 
 const GROUPS: SkillGroup[] = [
-    { id: "frontend", label: "Frontend", angle: 40, years: 4, items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
-    { id: "backend", label: "Backend", angle: 140, years: 3, items: ["Node.js", "Express", "Postgres", "Prisma"] },
-    { id: "devops", label: "DevOps", angle: 90, years: 2, items: ["Docker", "AWS"] },
-    { id: "mobile", label: "Mobile", angle: 320, years: 2, items: ["Flutter", "React Native"] },
+    { id: "frontend", label: "Frontend", angle: 40, years: 2, items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+    { id: "backend", label: "Backend", angle: 140, years: 2, items: ["Node.js", "Express", "Postgres", "Prisma"] },
+    { id: "devops", label: "DevOps", angle: 90, years: 0.5, items: ["Docker", "AWS"] },
+    { id: "mobile", label: "Mobile", angle: 320, years: 0.5, items: ["Flutter", "React Native"] },
 ];
 
 function Gauge({ angle, years }: { angle: number; years: number }) {
-    // Map years to percentage (cap at 5 years)
     const pct = Math.min(1, years / 5);
-    const circumference = 2 * Math.PI * 36; // r=36
+    const r = 36;
+    const circumference = 2 * Math.PI * r;
     const dash = circumference * pct;
+
+    const display = years < 1 ? "<1y" : `${Math.round(years)}y`;
 
     return (
         <div className="w-36 h-36 relative">
@@ -34,19 +36,29 @@ function Gauge({ angle, years }: { angle: number; years: number }) {
                     </linearGradient>
                 </defs>
                 <g transform="translate(50,50)">
-                    <circle r="36" fill="transparent" stroke="rgba(255,255,255,0.04)" strokeWidth="8" />
-                    <circle r="36" fill="transparent" stroke="url(#g)" strokeWidth="8" strokeLinecap="round"
-                        strokeDasharray={`${dash} ${circumference - dash}`} transform="rotate(-90)" />
-                    {/* needle */}
-                    <g style={{ transform: `rotate(${angle}deg)` }}>
+                    <circle r={r} fill="transparent" stroke="rgba(255,255,255,0.04)" strokeWidth={8} />
+                    <motion.circle
+                        r={r}
+                        fill="transparent"
+                        stroke="url(#g)"
+                        strokeWidth={8}
+                        strokeLinecap="round"
+                        strokeDasharray={`${dash} ${circumference - dash}`}
+                        initial={{ strokeDashoffset: circumference }}
+                        animate={{ strokeDashoffset: circumference - dash }}
+                        transition={{ duration: 0.9, ease: "easeOut" }}
+                        transform="rotate(-90)"
+                    />
+
+                    <motion.g initial={{ rotate: -90 }} animate={{ rotate: angle }} style={{ transformOrigin: "50% 50%" }}>
                         <rect x="-1" y="-2" width="2" height="38" rx="1" fill="var(--lux-gold)" />
                         <circle r="3" fill="var(--lux-gold)" />
-                    </g>
+                    </motion.g>
                 </g>
             </svg>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <div className="text-sm font-semibold text-(--lux-ivory)">{years}y</div>
+                <div className="text-sm font-semibold text-(--lux-ivory)">{display}</div>
                 <div className="text-xs text-(--muted-foreground)">experience</div>
             </div>
         </div>
@@ -55,28 +67,47 @@ function Gauge({ angle, years }: { angle: number; years: number }) {
 
 export function Skills() {
     return (
-        <section id="skills" className="container mx-auto py-16 px-4 md:px-8">
-            <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl sm:text-4xl font-serif tracking-tight">Skills & Focus</h2>
-                    <p className="mt-2 text-sm text-(--muted-foreground) max-w-2xl mx-auto">Interactive breakdown showing angle (focus) and time (experience) across my main skill areas.</p>
+        <section id="skills" className="container mx-auto pt-24 pb-20 px-4 md:px-8">
+            <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                style={{ willChange: "transform, opacity" }}
+            >
+                <div className="text-center mb-10">
+                    <h2 className="text-4xl sm:text-5xl font-serif tracking-tight font-light">Skills & Focus</h2>
+                    <p className="mt-3 text-sm text-(--muted-foreground) max-w-2xl mx-auto">Interactive breakdown showing angle (focus) and time (experience) across my main skill areas. Smooth motion, refined spacing, and subtle micro-interactions for a premium feel.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
-                    {GROUPS.map((g, i) => (
-                        <motion.div key={g.id} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.06 }} className="lux-card p-6 flex flex-col items-center text-center">
-                            <div className="-mt-2">
-                                <Gauge angle={g.angle} years={g.years} />
-                            </div>
-                            <h3 className="mt-4 text-lg font-semibold">{g.label}</h3>
-                            <div className="mt-2 text-sm text-(--muted-foreground)">
-                                {g.items.map((it) => (
-                                    <span key={it} className="inline-block px-2 py-1 mr-2 mb-2 rounded-full bg-white/6 text-xs">{it}</span>
-                                ))}
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }} initial="hidden" whileInView="show" viewport={{ once: true }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
+                        {GROUPS.map((g, i) => (
+                            <motion.div
+                                key={g.id}
+                                initial={{ opacity: 0, y: 18 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.035, y: -8 }}
+                                viewport={{ once: true }}
+                                transition={{ type: "spring", stiffness: 160, damping: 18, duration: 0.7, delay: i * 0.06 }}
+                                className="lux-card p-8 flex flex-col items-center text-center backdrop-blur-md"
+                                style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.25)" }}
+                            >
+                                <motion.div whileHover={{ scale: 1.06 }} transition={{ duration: 0.32 }} className="-mt-2">
+                                    <Gauge angle={g.angle} years={g.years} />
+                                </motion.div>
+
+                                <h3 className="mt-4 text-lg font-light text-(--lux-ivory)">{g.label}</h3>
+
+                                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6, delay: i * 0.05 }} className="mt-3 text-sm text-(--muted-foreground)">
+                                    {g.items.map((it) => (
+                                        <span key={it} className="inline-block px-3 py-1 mr-2 mb-2 rounded-full bg-white/6 text-xs">{it}</span>
+                                    ))}
+                                </motion.div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
             </motion.div>
         </section>
     );

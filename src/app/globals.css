@@ -226,6 +226,13 @@ body::before{
 }
 @keyframes spin-slow { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
 
+/* Spinning background helper for central visuals */
+.spin-bg{ animation: spin-slow 22s linear infinite; transform-origin: center center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-bg { animation: none !important; }
+}
+
 /* floating decorative images */
 .float-1{ animation: float-y 6s ease-in-out infinite; }
 .float-2{ animation: float-y 8s ease-in-out infinite; animation-delay: 1s }

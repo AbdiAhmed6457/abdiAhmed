@@ -68,17 +68,23 @@ export function Hero() {
                     </h1>
 
                     <p className="max-w-xl md:max-w-2xl mx-auto text-base text-(--muted-foreground) md:text-lg">
-                        I build production web applications with TypeScript, Next.js, Node, and cloud platforms. I focus on performance, reliability, and developer experience. I use React, Python, Java, and C++.
+                        I build production web applications with React, JavaScript, Next.js, Node, and cloud platforms. I focus on performance, reliability, and developer experience. I use Typescript, Python, Java, and C++.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center sm:items-center sm:justify-center md:justify-start gap-3 mt-2">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center sm:justify-center md:justify-start gap-3 mt-2 mb-16 md:mb-28">
                         <Link href="#projects" className="lux-btn lux-cta w-full sm:w-auto">
                             Projects
                             <ArrowRight className="ml-1 h-4 w-4" />
                         </Link>
-                        <Link href="#contact" className="lux-btn lux-ghost w-full sm:w-auto">
+
+                        <a
+                            href="https://t.me/seatOfHonour"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="lux-btn lux-ghost w-full sm:w-auto"
+                        >
                             Contact
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </motion.div>

@@ -14,7 +14,7 @@ const navItems = [
     { name: "About", href: "#about" },
     { name: "Skills", href: "#skills" },
     { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "https://t.me/seatOfHonour" },
 ];
 
 export function Navbar() {
@@ -32,16 +32,31 @@ export function Navbar() {
                         </Link>
                         <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
                             {navItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className={cn(
-                                        "transition-colors px-3 py-1 rounded-md",
-                                        pathname === item.href ? "text-(--lux-ivory) bg-[rgba(201,161,91,0.06)]" : "text-(--muted-foreground) hover:text-(--lux-ivory)"
-                                    )}
-                                >
-                                    {item.name}
-                                </Link>
+                                item.href.startsWith('http') ? (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={cn(
+                                            "transition-colors px-3 py-1 rounded-md",
+                                            "text-(--muted-foreground) hover:text-(--lux-ivory)"
+                                        )}
+                                    >
+                                        {item.name}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className={cn(
+                                            "transition-colors px-3 py-1 rounded-md",
+                                            pathname === item.href ? "text-(--lux-ivory) bg-[rgba(201,161,91,0.06)]" : "text-(--muted-foreground) hover:text-(--lux-ivory)"
+                                        )}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                )
                             ))}
                         </nav>
                     </div>
@@ -76,22 +91,37 @@ export function Navbar() {
                             }}>
                                 {navItems.map((item) => (
                                     <motion.li key={item.name} variants={{ hidden: { opacity: 0, y: 6 }, show: { opacity: 1, y: 0 } }}>
-                                        <Link
-                                            href={item.href}
-                                            className={cn(
-                                                "block rounded-md px-3 py-3 text-base font-medium w-full",
-                                                pathname === item.href ? "bg-[rgba(201,161,91,0.06)] text-(--lux-ivory)" : "text-(--muted-foreground) hover:bg-[rgba(255,255,255,0.02)] hover:text-(--lux-ivory)"
-                                            )}
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            {item.name}
-                                        </Link>
+                                        {item.href.startsWith('http') ? (
+                                            <a
+                                                href={item.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={cn(
+                                                    "block rounded-md px-3 py-3 text-base font-medium w-full",
+                                                    "text-(--muted-foreground) hover:bg-[rgba(255,255,255,0.02)] hover:text-(--lux-ivory)"
+                                                )}
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                {item.name}
+                                            </a>
+                                        ) : (
+                                            <Link
+                                                href={item.href}
+                                                className={cn(
+                                                    "block rounded-md px-3 py-3 text-base font-medium w-full",
+                                                    pathname === item.href ? "bg-[rgba(201,161,91,0.06)] text-(--lux-ivory)" : "text-(--muted-foreground) hover:bg-[rgba(255,255,255,0.02)] hover:text-(--lux-ivory)"
+                                                )}
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        )}
                                     </motion.li>
                                 ))}
                             </motion.ul>
                         </div>
                         <div className="mobile-cta-wrap">
-                            <Link href="#contact" className="mobile-cta">Contact</Link>
+                            <a href="https://t.me/seatOfHonour" target="_blank" rel="noopener noreferrer" className="mobile-cta">Contact</a>
                         </div>
                     </motion.nav>
                 )}

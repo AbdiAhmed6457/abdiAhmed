@@ -10,9 +10,10 @@ export default function Cursor() {
     if (typeof window === "undefined") return;
 
     // disable on touch devices
+    let hideTimer: number | undefined;
     if (window.matchMedia && window.matchMedia("(hover: none)").matches) {
-      setVisible(false);
-      return;
+      // schedule state change asynchronously to avoid synchronous setState in effect
+      hideTimer = window.setTimeout(() => setVisible(false), 0);
     }
 
     const cursor = ref.current;
@@ -56,6 +57,7 @@ export default function Cursor() {
     return () => {
       window.removeEventListener("mousemove", onMove);
       observer.disconnect();
+      if (hideTimer) clearTimeout(hideTimer);
       interactives.forEach((el) => {
         el.removeEventListener("mouseenter", onEnterInteractive);
         el.removeEventListener("mouseleave", onLeaveInteractive);

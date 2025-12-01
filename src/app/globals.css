@@ -338,3 +338,46 @@ html {
 }
 .group:hover .tooltip, .group:focus .tooltip, .group:focus-within .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
+/* 3D card flip for skills */
+.card-3d{ perspective: 900px; overflow: hidden; border-radius: inherit; }
+.card-3d-inner{ transition: transform 760ms ease-in-out; transform-style: preserve-3d; position: relative; min-height: 300px; }
+.card-3d-front, .card-3d-back{ backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-style: preserve-3d; position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 1.25rem; }
+.card-3d-front{ transform: rotateY(0deg); }
+.card-3d-back{ transform: rotateY(180deg); display:flex; flex-direction:column; gap:0.5rem; align-items:center; justify-content:center; }
+.group:hover .card-3d-inner, .group:focus-within .card-3d-inner{ transform: rotateY(180deg); }
+
+/* Richer back-face color for a premium look when flipped */
+.card-3d-back.lux-card{
+  background: linear-gradient(135deg, rgba(201,161,91,0.10), rgba(226,192,125,0.04));
+  border: 1px solid rgba(201,161,91,0.14);
+  box-shadow: 0 14px 40px rgba(201,161,91,0.06) inset, 0 18px 60px rgba(0,0,0,0.5);
+}
+
+/* Tech logo hover animation */
+.tech-logo{ transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms; }
+.tech-logo:hover{ transform: translateY(-4px) scale(1.06); box-shadow: 0 8px 30px rgba(201,161,91,0.12); }
+
+.tech-logo img{ display: block; }
+.tech-logo .tech-initials{ color: var(--lux-ivory); }
+
+/* tech logo tooltip */
+.logo-tooltip{
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(2,2,3,0.9);
+  color: var(--lux-ivory);
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+  z-index: 50;
+}
+.tech-logo:hover .logo-tooltip, .tech-logo:focus .logo-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.tech-logo:focus{ outline: none; box-shadow: 0 8px 30px rgba(201,161,91,0.12); }
+

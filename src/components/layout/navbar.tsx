@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
+// Image removed — using text logo
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -27,7 +27,7 @@ export function Navbar() {
                 <div className="site-navbar flex h-14 items-center justify-between rounded-full px-4 py-2">
                     <div className="flex items-center gap-4">
                         <Link href="/" className="flex items-center space-x-3">
-                            <Image src="/globe.svg" alt="logo" width={36} height={36} className="rounded-full" />
+                            <div className="w-9 h-9 rounded-full bg-[rgba(201,161,91,0.08)] flex items-center justify-center text-(--lux-ivory) font-semibold">AA</div>
                             <span className="font-semibold tracking-tight text-(--lux-ivory)">Abdi Ahmed</span>
                         </Link>
                         <nav className="hidden md:flex items-center gap-4 text-sm font-medium">

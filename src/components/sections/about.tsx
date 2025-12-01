@@ -2,10 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Code, Layers, Users, Globe, BookOpen, Laptop, Cpu } from "lucide-react";
+import { Code, Layers, Users, BookOpen, Laptop, Cpu } from "lucide-react";
 
-function Card({ icon, title, children, variant = "glass" }: { icon: any; title: string; children: React.ReactNode; variant?: string }) {
-    const Icon = icon;
+function Card({ icon, title, children, variant = "glass" }: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; title: string; children: React.ReactNode; variant?: string }) {
+    const Icon = icon as React.ComponentType<React.SVGProps<SVGSVGElement>>;
     const base = "p-5 rounded-2xl shadow-lg border backdrop-blur-md transition transform-gpu hover:-translate-y-1 hover:scale-105 duration-300 ease-out";
     const variants: Record<string, string> = {
         glass: base + " bg-white/6 border-white/10",
@@ -37,10 +37,7 @@ const container = {
     show: { transition: { staggerChildren: 0.06 } },
 };
 
-const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
-};
+// motion child variants (used via container's stagger)
 
 export function About() {
     return (

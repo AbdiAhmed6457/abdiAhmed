@@ -53,7 +53,7 @@ export function Contact() {
                 <div className="text-center space-y-4 mb-10">
                     <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Contact</h2>
                     <p className="text-(--muted-foreground)">
-                        Looking for a software developer to help build your product? I'm available for freelance, contract, and full-time roles. Tell me about your project and I'll get back within 48 hours.
+                        Looking for a software developer to help build your product? I&apos;m available for freelance, contract, and full-time roles. Tell me about your project and I&apos;ll get back within 48 hours.
                     </p>
                 </div>
 

@@ -3,29 +3,41 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import ProjectModal from "@/components/ui/project-modal";
 
-const projects = [
+type Project = {
+    title: string;
+    description: string;
+    tags: string[];
+    link?: string;
+    github?: string;
+    images?: string[];
+    image?: string;
+    className?: string;
+};
+
+const projects: Project[] = [
     {
-        title: "E-Commerce Platform",
-        description: "Built a scalable e-commerce platform with server-side rendering, inventory pipelines, and Stripe integration.",
-        tags: ["Next.js", "TypeScript", "Postgres"],
+        title: "JobPortal — MS Provide",
+        description: "Full-stack Job Portal enabling companies to register and post roles, and fresh graduates to discover and apply via advanced filters. Includes role-based admin control panels for managing students and recruiters, application workflows, and reporting.",
+        tags: ["Next.js", "React", "Node.js", "Postgres", "Docker", "AWS"],
         link: "#",
         github: "#",
-        image: "/image-one.jpg",
+        images: Array.from({ length: 10 }).map((_, i) => `/projects/jobPortal/jobPortal${i + 1}.png`),
         className: "md:col-span-2",
     },
     {
-        title: "Team Collaboration Tool",
-        description: "Realtime collaboration and task workflows with websockets, offline support and robust sync.",
-        tags: ["React", "WebSocket", "Redis"],
+        title: "Muraja — Ustaz Student Platform",
+        description:
+            "A complete Ustaz (religious teacher) management platform where students discover and connect with Ustaz based on rating, language, location and schedule. Ustaz can manage students, assign tasks, share availability, message individuals, and view simplified analytics on their dashboard. Beautiful, responsive UI with focus on discoverability and trust.",
+        tags: ["Next.js", "React", "Postgres", "Realtime"],
         link: "#",
         github: "#",
-        image: "/image-two.jpg",
-        className: "md:col-span-1",
+        images: Array.from({ length: 6 }).map((_, i) => `/projects/muraja/muraja${i === 0 ? "" : i}.png`),
+        className: "md:col-span-2",
     },
+   
     {
         title: "AI Content Platform",
         description: "SaaS product integrating LLMs for content automation with careful prompt engineering and rate limiting.",
@@ -35,6 +47,18 @@ const projects = [
         image: "/image-three.jpg",
         className: "md:col-span-1",
     },
+    
+    {
+        title: "JobPortal — MS Provide",
+        description: "Full-stack Job Portal enabling companies to register and post roles, and fresh graduates to discover and apply via advanced filters. Includes role-based admin control panels for managing students and recruiters, application workflows, and reporting.",
+        tags: ["Next.js", "React", "Node.js", "Postgres", "Docker", "AWS"],
+        link: "#",
+        github: "#",
+        images: Array.from({ length: 10 }).map((_, i) => `/projects/jobPortal/jobPortal${i + 1}.png`),
+        className: "md:col-span-2",
+    },
+    
+   
     {
         title: "Finance Dashboard",
         description: "Data-driven dashboards with realtime charts and secure data pipelines for financial insights.",
@@ -48,9 +72,9 @@ const projects = [
 
 export function Projects() {
     const [open, setOpen] = useState(false);
-    const [active, setActive] = useState<any>(null);
+    const [active, setActive] = useState<Project | null>(null);
 
-    const openProject = (project: any) => {
+    const openProject = (project: typeof projects[number]) => {
         setActive(project);
         setOpen(true);
     };
@@ -84,14 +108,16 @@ export function Projects() {
                             className={`group relative overflow-hidden rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] text-(--lux-ivory) transition-all hover:shadow-lg ${project.className}`}
                             onClick={() => openProject(project)}
                         >
-                            <div className="aspect-video w-full overflow-hidden">
-                                <Image
-                                    src={project.image || "/landing-page.jpg"}
-                                    alt={project.title}
-                                    width={1200}
-                                    height={675}
-                                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                                />
+                            <div className="w-full p-3">
+                                <div className="overflow-hidden rounded-xl bg-[rgba(255,255,255,0.02)]">
+                                    <Image
+                                        src={project.images?.[0] || project.image || "/landing-page.jpg"}
+                                        alt={project.title}
+                                        width={1200}
+                                        height={800}
+                                        className="object-cover w-full h-56 sm:h-72 md:h-80 transition-transform duration-500 group-hover:scale-105 object-center"
+                                    />
+                                </div>
                             </div>
                             <div className="p-6">
                                 <div className="flex items-center justify-between mb-2">
@@ -116,7 +142,7 @@ export function Projects() {
                         </motion.div>
                     ))}
                 </div>
-                <ProjectModal open={open} onClose={close} title={active?.title} description={active?.description} image={active?.image} tags={active?.tags} />
+                <ProjectModal open={open} onClose={close} title={active?.title} description={active?.description} image={active?.image} images={active?.images || []} tags={active?.tags} />
             </motion.div>
         </section>
     );

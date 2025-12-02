@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+// next.config.ts
+const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
@@ -8,6 +7,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.simpleicons.org",
       },
+      { protocol: "https", hostname: "raw.githubusercontent.com" },
     ],
   },
 };

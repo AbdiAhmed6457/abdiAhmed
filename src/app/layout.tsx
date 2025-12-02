@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import CursorLoader from "@/components/ui/cursor-loader";
+import Footer from "@/components/layout/footer";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({
             <Navbar />
             <main className="min-h-screen pt-16">
               {children}
+              <Footer />
             </main>
             <CursorLoader />
           </SmoothScrollProvider>

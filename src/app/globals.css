@@ -291,6 +291,9 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Prevent horizontal scrolling caused by occasional overflow on small screens */
+body { overflow-x: hidden; }
+
 /* Custom scrollbar for a premium feel */
 ::-webkit-scrollbar {
   width: 8px;
@@ -317,6 +320,45 @@ html {
 }
 @keyframes shimmer{ 0%{ background-position:200% 0 } 100%{ background-position:-200% 0 } }
 
+/* Footer visuals */
+.site-footer{
+  position: relative;
+  overflow: hidden;
+  color: var(--lux-ivory);
+  /* dense, non-imaged footer: use a dark luxury gradient (no background image) */
+  background: linear-gradient(180deg, rgba(2,2,3,0.64), rgba(2,2,3,0.7));
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+.site-footer::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 10% 20%, rgba(201,161,91,0.06), transparent 8%), radial-gradient(circle at 80% 80%, rgba(201,161,91,0.05), transparent 8%);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.site-footer::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.01) 100%);
+  opacity: 0.35;
+  transform-origin: left center;
+  animation: footer-pan 18s linear infinite;
+  pointer-events: none;
+}
+@keyframes footer-pan{ 0%{ transform: translateX(-6%) } 50%{ transform: translateX(6%) } 100%{ transform: translateX(-6%) } }
+
+.site-footer-inner{ position: relative; z-index: 10; }
+.site-footer .tech-pill{ transition: transform 220ms, box-shadow 220ms; }
+.site-footer .tech-pill:hover{ transform: translateY(-3px); box-shadow: 0 8px 30px rgba(201,161,91,0.06); }
+.site-footer .footer-cta{ text-decoration: none }
+
+@media (max-width: 420px){
+  .site-footer-inner{ padding-left: 12px; padding-right: 12px }
+  .site-footer .w-8 { width: 36px; height: 36px }
+}
+
 /* Tooltip used by gauges */
 .tooltip{
   position: absolute;
@@ -341,7 +383,7 @@ html {
 /* 3D card flip for skills */
 .card-3d{ perspective: 900px; overflow: hidden; border-radius: inherit; }
 .card-3d-inner{ transition: transform 760ms ease-in-out; transform-style: preserve-3d; position: relative; min-height: 300px; }
-.card-3d-front, .card-3d-back{ backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-style: preserve-3d; position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 1.25rem; }
+.card-3d-front, .card-3d-back{ backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 1.25rem; }
 .card-3d-front{ transform: rotateY(0deg); }
 .card-3d-back{ transform: rotateY(180deg); display:flex; flex-direction:column; gap:0.5rem; align-items:center; justify-content:center; }
 .group:hover .card-3d-inner, .group:focus-within .card-3d-inner{ transform: rotateY(180deg); }
@@ -351,6 +393,22 @@ html {
   background: linear-gradient(135deg, rgba(201,161,91,0.10), rgba(226,192,125,0.04));
   border: 1px solid rgba(201,161,91,0.14);
   box-shadow: 0 14px 40px rgba(201,161,91,0.06) inset, 0 18px 60px rgba(0,0,0,0.5);
+}
+
+/* Ensure child images/SVGs remain visible during 3D transforms
+   Some browsers hide replaced elements during backface flips unless
+   their own backface-visibility and transform-style are set. */
+.card-3d-front *, .card-3d-back *{
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+  -webkit-transform-style: preserve-3d !important;
+  transform-style: preserve-3d !important;
+}
+
+.tech-logo img, .tech-logo svg, .tech-logo > img, .tech-logo > svg{
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+  transform: translateZ(0);
 }
 
 /* Tech logo hover animation */

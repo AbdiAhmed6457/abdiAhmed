@@ -1,252 +1,137 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github } from "lucide-react";
-import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
-import ProjectModal from "@/components/ui/project-modal";
-
-type Project = {
-    title: string;
-    description: string;
-    tags: string[];
-    link?: string;
-    github?: string;
-    images?: string[];
-    image?: string;
-    className?: string;
-};
-
-const projects: Project[] = [
-    {
-        title: "JobPortal — MS Provide",
-        description: "Full-stack Job Portal enabling companies to register and post roles, and fresh graduates to discover and apply via advanced filters. Includes role-based admin control panels for managing students and recruiters, application workflows, and reporting.",
-        tags: ["Next.js", "React", "Node.js", "Postgres", "Docker", "AWS"],
-        link: "#",
-        github: "#",
-        images: Array.from({ length: 10 }).map((_, i) => `/projects/jobPortal/jobPortal${i + 1}.png`),
-        className: "md:col-span-2",
-    },
-    {
-        title: "Muraja — Ustaz Student Platform",
-        description:
-            "A complete Ustaz (religious teacher) management platform where students discover and connect with Ustaz based on rating, language, location and schedule. Ustaz can manage students, assign tasks, share availability, message individuals, and view simplified analytics on their dashboard. Beautiful, responsive UI with focus on discoverability and trust.",
-        tags: ["Next.js", "React", "Postgres", "Realtime"],
-        link: "#",
-        github: "#",
-        images: [
-            "/projects/muraja/muraja0.png",
-            "/projects/muraja/muraja00.png",
-            "/projects/muraja/muraja1.png",
-            "/projects/muraja/muraja2.png",
-            "/projects/muraja/muraja3.png",
-            "/projects/muraja/muraja4.png",
-            "/projects/muraja/muraja5.png",
-        ],
-        className: "md:col-span-2",
-    },
-   
-   
-    {
-        title: "CheapDelala — Rental Listings Simplified",
-        description:
-            "An intuitive rental listings platform where owners post properties with full descriptions, photos and availability. Tenants can search by location, price and features, saving time and effort compared to offline searching.",
-        tags: ["Next.js", "React", "Postgres"],
-        link: "#",
-        github: "#",
-        images: ["/projects/others/cheapdelala.png"],
-        className: "md:col-span-1",
-    },
-    {
-        title: "Ecommerce — Amazon Clone",
-        description: "An early learning ecommerce project modeled after Amazon: product listings, cart, checkout and order flow showcasing foundational ecommerce patterns.",
-        tags: ["React", "Stripe", "Node.js"],
-        link: "#",
-        github: "#",
-        images: ["/projects/others/ecommerce.png"],
-        className: "md:col-span-1",
-    },
-    {
-        title: "Personal Blog",
-        description: "A lightweight personal blogging platform used to publish thoughts, tutorials and updates — includes markdown support and a simple CMS for quick posts.",
-        tags: ["Next.js", "Markdown"],
-        link: "#",
-        github: "#",
-        images: ["/projects/others/blog.png"],
-        className: "md:col-span-1",
-    },
-    {
-        title: "TheSocial — Mini Social Network",
-        description: "A full-featured social network with authentication, posting, commenting, liking and scalable backend patterns — demonstrates end-to-end social features and moderation workflows.",
-        tags: ["React", "WebSocket", "Node.js"],
-        link: "#",
-        github: "#",
-        images: ["/projects/others/social.png"],
-        className: "md:col-span-1",
-    },
-    
-   
-];
+import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { projects } from "@/lib/projectsData";
+import type { Project } from "@/lib/projectsData";
 
 export function Projects() {
-    const [open, setOpen] = useState(false);
-    const [active, setActive] = useState<Project | null>(null);
+  return (
+    <section id="projects" className="relative py-24 overflow-hidden bg-[var(--lux-background)]">
+      {/* Luxury background glow */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--lux-gold)]/5 via-transparent to-[var(--lux-gold)]/3" />
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[var(--lux-gold)]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[var(--lux-gold-2)]/10 rounded-full blur-3xl" />
+      </div>
 
-    const openProject = (project: typeof projects[number]) => {
-        setActive(project);
-        setOpen(true);
-    };
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--lux-gold)] via-[var(--lux-gold-2)] to-[var(--lux-gold)]">
+              Built to Ship
+            </span>
+          </h2>
+          <p className="mt-6 text-lg md:text-xl text-[var(--muted-foreground)] max-w-3xl mx-auto">
+            Real products. Real users. Real scale.
+          </p>
+        </motion.div>
 
-    const close = () => {
-        setOpen(false);
-        // after closing modal, scroll back to the top of the projects section
-        setTimeout(() => {
-            try {
-                const el = document.getElementById("projects");
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            } catch {
-                // ignore in non-browser environments
-            }
-        }, 120);
-    };
-
-    return (
-        <section id="projects" className="container mx-auto py-20 px-4 md:px-8">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="space-y-12"
-            >
-                <div className="text-center space-y-4">
-                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Featured Work</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                        A selection of projects that demonstrate my ability to solve complex problems.
-                    </p>
-                </div>
-
-                <div className="flex flex-col gap-8">
-                    {projects.map((project, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: index * 0.08 }}
-                            className={`group relative overflow-hidden rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] text-(--lux-ivory) transition-all hover:shadow-lg mx-4 md:mx-8`}
-                        >
-                            <ProjectCard project={project} onOpen={() => openProject(project)} />
-                        </motion.div>
-                    ))}
-                </div>
-                <ProjectModal open={open} onClose={close} title={active?.title} description={active?.description} image={active?.image} images={active?.images || []} tags={active?.tags} />
-            </motion.div>
-        </section>
-    );
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.slug} project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
-    const images = React.useMemo(() => (project.images && project.images.length ? project.images : project.image ? [project.image] : ["/landing-page.jpg"]), [project.images, project.image]);
-    const [preview, setPreview] = useState(0);
-    const [paused, setPaused] = useState(false);
-    const ref = useRef<HTMLDivElement | null>(null);
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const cover = project.images?.[0] || project.image || "/projects/muraja/muraja0.png";
 
-    useEffect(() => {
-        if (!images || images.length <= 1) return;
-        if (paused) return;
-        const id = window.setInterval(() => {
-            setPreview((i) => (i + 1) % images.length);
-        }, 2600);
-        return () => window.clearInterval(id);
-    }, [images, paused]);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: index * 0.12 }}
+      whileHover={{ y: -16, scale: 1.02 }}
+      className="group relative"
+    >
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/5 via-white/2 to-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:shadow-[var(--lux-gold)]/30 transition-all duration-500">
+        {/* Floating gold orbs */}
+        <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-[var(--lux-gold)]/20 blur-3xl group-hover:bg-[var(--lux-gold-2)]/30 transition-all duration-1000" />
+        <div className="absolute -bottom-32 -left-32 w-72 h-72 rounded-full bg-[var(--lux-gold-2)]/20 blur-3xl group-hover:bg-[var(--lux-gold)]/30 transition-all duration-1000" />
 
-    return (
-            <div className="w-full h-full cursor-pointer"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-            onClick={onOpen}
-            ref={ref}
-        >
-            <div className="md:grid md:grid-cols-2 gap-0">
-                <div className="p-3">
-                    <div className="overflow-hidden rounded-xl bg-[rgba(255,255,255,0.02)] relative">
-                        <Image
-                            src={images[preview]}
-                            alt={project.title}
-                            width={1600}
-                            height={900}
-                            quality={90}
-                            priority={preview === 0}
-                            className="object-cover w-full h-64 sm:h-72 md:h-96 transition-transform duration-500 group-hover:scale-105 object-center"
-                        />
+        {/* Screenshot with elegant frame */}
+        <div className="relative p-8 md:p-12">
+          <div className="relative mx-auto w-full max-w-lg">
+            {/* Elegant device-like frame */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-8 ring-white/10 ring-offset-8 ring-offset-transparent">
+              {/* Inner shadow + reflection */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/10 z-10 pointer-events-none" />
+              <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white/20 to-transparent z-10 pointer-events-none" />
 
-                        {images.length > 1 && (
-                            <>
-                                <button
-                                    aria-label="Prev"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setPreview((i) => (i - 1 + images.length) % images.length);
-                                    }}
-                                    className="absolute left-2 top-1/2 -translate-y-1/2 lux-btn lux-ghost"
-                                >
-                                    ◀
-                                </button>
-                                <button
-                                    aria-label="Next"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setPreview((i) => (i + 1) % images.length);
-                                    }}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 lux-btn lux-ghost"
-                                >
-                                    ▶
-                                </button>
-
-                                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
-                                    {images.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            onMouseEnter={() => setPreview(i)}
-                                            onFocus={() => setPreview(i)}
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            aria-label={`Show image ${i + 1}`}
-                                            className={`w-2 h-2 rounded-full ${i === preview ? "bg-(--lux-gold)" : "bg-white/30"}`}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                <div className="p-6 flex flex-col justify-center">
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-xl font-semibold text-(--lux-ivory)">{project.title}</h3>
-                                    <div className="flex gap-3">
-                                        <span className="text-(--muted-foreground)"><Github className="h-5 w-5" /></span>
-                                        <a href={project.link || "#"} onClick={(e) => e.stopPropagation()} className="text-(--muted-foreground)"><ArrowUpRight className="h-5 w-5" /></a>
-                                    </div>
-                                </div>
-                    <p className="text-(--muted-foreground) mb-4">{project.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                            <span
-                                key={tag}
-                                className="inline-flex items-center rounded-md bg-[rgba(255,255,255,0.03)] px-2 py-1 text-xs font-medium text-(--muted-foreground)"
-                            >
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
-
-                    <div className="mt-4 flex items-center gap-3">
-                        <button onClick={() => { onOpen(); }} className="lux-btn lux-ghost text-sm">Show all</button>
-                        <span className="text-xs text-(--muted-foreground)">View full project images (opens inline)</span>
-                    </div>
-                </div>
+              {/* Actual screenshot */}
+              <div className="aspect-video relative bg-black/50">
+                <img
+                  src={cover}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
+
+            {/* Subtle floating animation */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[var(--lux-gold)]/10 to-transparent blur-xl opacity-60 -z-10"
+            />
+          </div>
         </div>
-    );
+
+        {/* Content */}
+        <div className="relative z-20 p-8 pt-0 text-center">
+          <h3 className="text-2xl md:text-3xl font-bold text-[var(--lux-ivory)] mb-3">
+            {project.title}
+          </h3>
+
+          <p className="text-[var(--muted-foreground)] text-base md:text-lg leading-relaxed mb-6 max-w-xl mx-auto hidden md:block">
+            {project.description}
+          </p>
+          <p className="text-[var(--muted-foreground)] text-base leading-relaxed mb-6 md:hidden">
+            {project.description.length > 130 ? project.description.slice(0, 120) + "…" : project.description}
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-4 py-2 rounded-full text-xs md:text-sm font-medium bg-white/10 border border-[var(--lux-gold)]/30 text-[var(--lux-gold)] backdrop-blur-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+            {project.github && (
+              <a href={project.github} target="_blank" rel="noopener noreferrer"
+                className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur transition-all hover:scale-110 border border-white/10">
+                <Github className="w-5 h-5 text-[var(--lux-gold)]" />
+              </a>
+            )}
+            {project.link && (
+              <a href={project.link} target="_blank" rel="noopener noreferrer"
+                className="px-7 py-3 rounded-full bg-gradient-to-r from-[var(--lux-gold)] to-[var(--lux-gold-2)] text-black font-bold hover:scale-105 transition-all shadow-lg">
+                View Live <ExternalLink className="inline ml-2 w-4 h-4" />
+              </a>
+            )}
+            <Link href={`/gallery/${project.slug}`}
+              className="text-[var(--lux-gold)] hover:text-[var(--lux-gold-2)] font-medium flex items-center gap-2 underline underline-offset-4">
+              Full Gallery <ArrowUpRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
 }

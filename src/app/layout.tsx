@@ -6,6 +6,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import CursorLoader from "@/components/ui/cursor-loader";
 import Footer from "@/components/layout/footer";
+// Dev-only overflow detector (enabled by NEXT_PUBLIC_SHOW_OVERFLOW=true)
+import OverflowDetector from "@/components/dev/overflow-detector";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -44,6 +46,7 @@ export default function RootLayout({
             <main className="min-h-screen pt-16">
               {children}
               <Footer />
+              {process.env.NEXT_PUBLIC_SHOW_OVERFLOW === "true" && <OverflowDetector />}
             </main>
             <CursorLoader />
           </SmoothScrollProvider>

@@ -224,10 +224,21 @@ body::before{
   animation: spin-slow 18s linear infinite;
   mix-blend-mode: overlay;
 }
-@keyframes spin-slow { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+@keyframes spin-slow { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-/* Spinning background helper for central visuals */
-.spin-bg{ animation: spin-slow 22s linear infinite; transform-origin: center center; }
+/* Spinning background helper for central visuals
+   - centered via translate so rotation doesn't overwrite centering
+   - limited max size so rotated corners are clipped when parent has overflow:hidden */
+.spin-bg{ 
+  animation: spin-slow 22s linear infinite; 
+  transform-origin: center center; 
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  will-change: transform;
+  max-width: 140%;
+  max-height: 140%;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .spin-bg { animation: none !important; }
@@ -281,6 +292,28 @@ body::before{
 /* Animated hamburger subtle effect */
 .hamburger{ transition: transform 160ms ease, color 160ms ease; }
 .hamburger:active{ transform: scale(0.96); }
+
+/* Ensure the hamburger stays inside small viewports and away from safe-area notches */
+header .hamburger{
+  /* prefer safe-area inset on mobile; fall back to 0.75rem */
+  right: max(0.75rem, env(safe-area-inset-right));
+  top: 0.6rem;
+  /* clamp ensures it doesn't move too far when container shrinks */
+  right: clamp(0.5rem, 3vw, 1rem);
+}
+
+/* Place hamburger inside the site navbar and keep it visibly above content.
+   This avoids using global !important overrides while still ensuring mobile
+   accessibility and preventing clipping by parents that use overflow. */
+header.site-navbar{ position: fixed; inset-inline: 0; top: 1rem; z-index: 60; }
+header.site-navbar .hamburger{
+  position: absolute;
+  top: 0.5rem;
+  right: clamp(0.5rem, 3vw, 1rem);
+  z-index: 70;
+  background: rgba(2,2,3,0.6);
+  border: 1px solid rgba(255,255,255,0.04);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .mobile-cta, .hamburger { transition: none; }
@@ -359,83 +392,55 @@ body { overflow-x: hidden; }
   .site-footer .w-8 { width: 36px; height: 36px }
 }
 
-/* Tooltip used by gauges */
-.tooltip{
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  top: calc(100% + 6px);
-  background: rgba(2,2,3,0.88);
-  color: var(--lux-ivory);
-  padding: 0.45rem 0.65rem;
-  border-radius: 0.5rem;
-  font-size: 0.78rem;
-  white-space: nowrap;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  z-index: 40;
-  opacity: 0;
-  transform-origin: top center;
-  transition: opacity 140ms ease, transform 140ms ease;
-  pointer-events: none;
-}
-.group:hover .tooltip, .group:focus .tooltip, .group:focus-within .tooltip { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+/* Tooltip used by gauges — removed per user request */
+.tooltip{ display: none !important; }
 
-/* 3D card flip for skills */
-.card-3d{ perspective: 900px; overflow: hidden; border-radius: inherit; }
-.card-3d-inner{ transition: transform 760ms ease-in-out; transform-style: preserve-3d; position: relative; min-height: 300px; }
-.card-3d-front, .card-3d-back{ backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; padding: 1.25rem; }
-.card-3d-front{ transform: rotateY(0deg); }
-.card-3d-back{ transform: rotateY(180deg); display:flex; flex-direction:column; gap:0.5rem; align-items:center; justify-content:center; }
-.group:hover .card-3d-inner, .group:focus-within .card-3d-inner{ transform: rotateY(180deg); }
+/* 3D flip removed per user request — cards are simple, non-flipping blocks */
+.card-3d{ overflow: visible; border-radius: inherit; min-height: 300px; }
+.card-3d-inner{ transition: none; transform: none; position: relative; height: auto; min-height: 0; display: block; }
+.card-3d-front, .card-3d-back{ position: relative; inset: auto; width: 100%; height: auto; box-sizing: border-box; padding: 1.25rem; display: block; }
+.card-3d-back{ display: block; }
 
-/* Richer back-face color for a premium look when flipped */
+/* Keep lux-card styling for back content but remove any 3D-specific visuals */
 .card-3d-back.lux-card{
-  background: linear-gradient(135deg, rgba(201,161,91,0.10), rgba(226,192,125,0.04));
-  border: 1px solid rgba(201,161,91,0.14);
-  box-shadow: 0 14px 40px rgba(201,161,91,0.06) inset, 0 18px 60px rgba(0,0,0,0.5);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: none;
 }
 
-/* Ensure child images/SVGs remain visible during 3D transforms
-   Some browsers hide replaced elements during backface flips unless
-   their own backface-visibility and transform-style are set. */
-.card-3d-front *, .card-3d-back *{
-  -webkit-backface-visibility: visible !important;
-  backface-visibility: visible !important;
-  -webkit-transform-style: preserve-3d !important;
-  transform-style: preserve-3d !important;
+/* Flipped-back UI converted to a normal section (no 3D transforms) */
+.card-3d-back .tech-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 0.75rem;
+  align-items: center;
+  justify-items: center;
 }
-
-.tech-logo img, .tech-logo svg, .tech-logo > img, .tech-logo > svg{
-  -webkit-backface-visibility: visible !important;
-  backface-visibility: visible !important;
-  transform: translateZ(0);
+.card-3d-back .tech-grid{ position: relative; z-index: 20; opacity: 1; }
+.card-3d-back .tech-logo{
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45), 0 2px 6px rgba(201,161,91,0.06) inset !important;
+  transition: transform 260ms, box-shadow 260ms !important;
 }
+.card-3d-back .tech-logo{ z-index: 22; opacity: 1; }
+.card-3d-back .tech-logo img, .card-3d-back .tech-logo svg{ width: 40px !important; height: 40px !important; }
+.card-3d-back .tech-logo:focus, .card-3d-back .tech-logo:hover{ transform: translateY(-6px) scale(1.06) !important; box-shadow: 0 14px 40px rgba(0,0,0,0.55) !important; }
 
-/* Tech logo hover animation */
-.tech-logo{ transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms; }
-.tech-logo:hover{ transform: translateY(-4px) scale(1.06); box-shadow: 0 8px 30px rgba(201,161,91,0.12); }
+.card-3d-back .back-title{ font-weight: 600; letter-spacing: 0.2px; color: var(--lux-ivory); margin-bottom: 0.45rem; }
 
-.tech-logo img{ display: block; }
-.tech-logo .tech-initials{ color: var(--lux-ivory); }
+.card-3d-back .back-subtle{ font-size: 0.85rem; color: var(--muted-foreground); margin-top: 0.6rem; }
 
-/* tech logo tooltip */
-.logo-tooltip{
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  background: rgba(2,2,3,0.9);
-  color: var(--lux-ivory);
-  padding: 0.35rem 0.6rem;
-  border-radius: 0.5rem;
-  font-size: 0.72rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms ease, transform 160ms ease;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.6);
-  z-index: 50;
-}
+.card-3d-back{ position: relative; overflow: hidden; }
+.card-3d-back .big-label{ display: none; }
+.card-3d-back .back-foreground{ position: relative; z-index: 12; width: 100%; display: block; padding: 1rem; }
+.card-3d-back .back-foreground .back-title-large{ text-align: right; font-size: clamp(20px, 3.6vw, 36px); font-weight: 700; color: var(--lux-ivory); }
+.card-3d-back .back-foreground .back-subtitle-small{ text-align: right; color: var(--muted-foreground); font-size: 0.85rem; margin-top: 0.25rem; }
+
+/* tech logo tooltip (kept) */
+.logo-tooltip{ position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(6px); background: rgba(2,2,3,0.9); color: var(--lux-ivory); padding: 0.35rem 0.6rem; border-radius: 0.5rem; font-size: 0.72rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 160ms ease, transform 160ms ease; box-shadow: 0 6px 30px rgba(0,0,0,0.6); z-index: 50; }
 .tech-logo:hover .logo-tooltip, .tech-logo:focus .logo-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 .tech-logo:focus{ outline: none; box-shadow: 0 8px 30px rgba(201,161,91,0.12); }
 

@@ -20,15 +20,7 @@ export function Hero() {
                 />
             </div>
 
-            <div className="absolute inset-0 -z-30 hero-gradient overflow-hidden">
-                <Image
-                    src="/globe.svg"
-                    alt="decor"
-                    fill
-                    className="object-cover opacity-10 mix-blend-overlay"
-                    priority
-                />
-            </div>
+            {/* removed globe decorative image to avoid visual clutter and overflow */}
 
             {/* FIXED SVG — wrapped to avoid overflow */}
             <div className="absolute inset-0 -z-20 w-full overflow-hidden pointer-events-none">

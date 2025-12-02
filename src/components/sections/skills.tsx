@@ -16,7 +16,7 @@ const GROUPS: SkillGroup[] = [
   { id: "frontend", label: "Frontend", angle: 40, years: 2, items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
   { id: "backend", label: "Backend", angle: 140, years: 2, items: ["Node.js", "Express", "Postgres", "Prisma", "Django", "MongoDB", "MySQL", "NoSQL"] },
   { id: "devops", label: "DevOps", angle: 90, years: 0.5, items: ["Docker", "AWS", "GitHub"] },
-  { id: "mobile", label: "Mobile", angle: 320, years: 0.5, items: ["Flutter", "React Native"] },
+  { id: "mobile", label: "Mobile", angle: 320, years: 0, items: ["Flutter", "React Native"] },
 ];
 
 function Gauge({ angle, years }: { angle: number; years: number }) {
@@ -68,8 +68,8 @@ function Gauge({ angle, years }: { angle: number; years: number }) {
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <div className="text-2xl font-semibold text-(--lux-ivory)">{percent}%</div>
-        <div className="text-xs text-(--muted-foreground)">{display}</div>
+        <div className="text-2xl font-semibold text-[var(--lux-ivory)]">{percent}%</div>
+        <div className="mt-2 text-sm text-[var(--muted-foreground)] bg-white/5 dark:bg-black/10 px-3 py-1 rounded-full">{display}</div>
       </div>
     </div>
   );
@@ -191,10 +191,7 @@ export function Skills() {
                         <Gauge angle={g.angle} years={g.years} />
                       </motion.div>
 
-                      <div id={`skill-tooltip-${g.id}`} className="tooltip" role="status" aria-hidden={focusedId !== g.id}>
-                        <strong className="mr-2">{g.label}</strong>
-                        Angle: {g.angle}° • {g.years < 1 ? "<1y" : `${g.years}y`} • {g.items.join(", ")}
-                      </div>
+                      {/* Tooltip removed per user request */}
 
                       <h3 className="mt-4 text-lg font-light text-(--lux-ivory)">{g.label}</h3>
 
@@ -209,17 +206,7 @@ export function Skills() {
                       </motion.div>
                     </div>
 
-                    <div className="card-3d-back lux-card p-6 flex flex-col items-center justify-center">
-                      <div className="text-sm font-medium text-(--lux-ivory)">Technologies</div>
-                      <div className="mt-3 flex gap-3 flex-wrap justify-center">
-                        {g.items.map((it) => (
-                          <div key={it} className="transform-gpu transition-all duration-400 hover:scale-110">
-                            <TechLogo name={it} />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mt-2 text-xs text-(--muted-foreground)">{g.years < 1 ? '<1y' : `${g.years}y`} experience</div>
-                    </div>
+                    {/* Back-face content removed per user request (Technologies & icons) */}
                   </div>
                 </div>
               </motion.div>
